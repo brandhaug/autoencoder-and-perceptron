@@ -2,6 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
+# Predicts 0 or 1
 def predict(inputs, weights):
     activation = 0.0
     for i, w in zip(inputs, weights):
@@ -9,6 +10,7 @@ def predict(inputs, weights):
     return 1.0 if activation >= 0.0 else 0.0
 
 
+# Visualization
 def plot(matrix, weights=None, title="Prediction Matrix"):
     fig, ax = plt.subplots()
     ax.set_title(title)
@@ -49,14 +51,14 @@ def plot(matrix, weights=None, title="Prediction Matrix"):
     plt.xlim(0, 1.05)
     plt.ylim(0, 1.05)
 
-    plt.scatter(c0_data[0], c0_data[1], s=40.0, c='red') # Red dots
-    plt.scatter(c1_data[0], c1_data[1], s=40.0, c='blue') # Blue dots
+    plt.scatter(c0_data[0], c0_data[1], s=40.0, c='red')  # Red dots
+    plt.scatter(c1_data[0], c1_data[1], s=40.0, c='blue')  # Blue dots
 
-    plt.legend(fontsize=10, loc=1)
     plt.show()
     return
 
 
+# Calculates accuracy: (correct predictions / total predictions)
 def accuracy(matrix, weights):
     correct_count = 0.0
     predictions = []
@@ -68,6 +70,7 @@ def accuracy(matrix, weights):
     return correct_count / float(len(matrix))
 
 
+# Updates weights based on error from predictions
 def train_weights(matrix, weights, epochs_count=10, threshold=1.0):
     for epoch in range(epochs_count):
         current_accuracy = accuracy(matrix, weights)
@@ -93,26 +96,21 @@ def train_weights(matrix, weights, epochs_count=10, threshold=1.0):
     return weights
 
 
-def main():
+if __name__ == '__main__':
     print("Starting")
 
     # Bias, i1, i2,  y
-    matrix = [[1.00, 0.08, 0.72, 1.0],
-              [1.00, 0.10, 1.00, 0.0],
-              [1.00, 0.26, 0.58, 1.0],
-              [1.00, 0.35, 0.95, 0.0],
-              [1.00, 0.45, 0.15, 1.0],
-              [1.00, 0.60, 0.30, 1.0],
-              [1.00, 0.70, 0.65, 0.0],
-              [1.00, 0.42, 0.45, 1.0],
-              [1.00, 0.92, 0.95, 0.0],
-              [1.00, 0.22, 0.11, 1.0],
-              [1.00, 0.32, 0.75, 0.0],
-              [1.00, 0.92, 0.95, 0.0]]
-    weights = [0.40, -1.00, 1.00]  # initial weights specified in problem
-    threshold = 1
+    dataset = [[1.00, 1.0, 1.0, 1.0],
+               [1.00, 1.0, 0.0, 0.0],
+               [1.00, 0.0, 1.0, 0.0],
+               [1.00, 0.0, 0.0, 0.0]]  # AND
 
-    weights = train_weights(matrix, weights=weights, threshold=threshold)
+    # dataset = [[1.00, 1.0, 1.0, 1.0],
+    #           [1.00, 1.0, 0.0, 1.0],
+    #           [1.00, 0.0, 1.0, 1.0],
+    #           [1.00, 0.0, 0.0, 0.0]]  # OR
 
+    initial_weights = [0.40, -1.00, 1.00]  # initial weights specified in problem
+    initial_threshold = 1
 
-main()
+    train_weights(dataset, weights=initial_weights, threshold=initial_threshold)
